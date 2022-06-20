@@ -1,14 +1,17 @@
 from uv_map import UV_Map
 import cv2 as cv
 
-final_img = UV_Map('tshirt2.jpg', 'tp_back.txt', 'tp_back_uv.txt')
+final_img = UV_Map('tshirt7.jpg', 'input1.txt', 'output1.txt')
 cv.imwrite('tshirt1_transformed.jpg', final_img)
 
 '''
 http://localhost:5000/?image=https://www.mydesignation.com/wp-content/uploads/2019/06/but-why-tshirt-mydesignation-image-latest.jpg
 http://192.168.101.8:5000/?image=https://i.imgur.com/DOmYCmr.png
 http://192.168.101.8:5000/?image=https://i.imgur.com/ukOa5vd.jpg
+http://192.168.101.8:5000/?image=https://i.imgur.com/WxvT8as.jpg
+http://192.168.101.8:5000/?image=https://i.imgur.com/Rr61YzX.jpg
 http://192.168.101.8:5000/?image=https://i.imgur.com/zelh7NM.png
+http://192.168.167.179:5000/?image=https://www.xtees.com/resources/images/products/xt-funny.jpg
 '''
 
 '''
