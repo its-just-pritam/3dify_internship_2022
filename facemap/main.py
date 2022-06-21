@@ -1,4 +1,5 @@
 import io
+import re
 import sys
 from matplotlib import pyplot as plt
 from obj_helpers import read_obj
@@ -16,15 +17,39 @@ def nearest_3_points(point, mp_vertices):
         distances.append((i, dist))
 
     distances.sort(key = lambda x: x[1])
-    print(distances[0][0], distances[0][1])
-
     return [distances[0][0], distances[1][0], distances[2][0]]
+
+
+def nearest_face(point, centroids):
+
+    distances = []
+    for i in range(len(centroids)):
+        dist = math.dist(point, centroids[i])
+        distances.append((i, dist))
+
+    distances.sort(key = lambda x: x[1])
+    return distances[0][0]
+
+
+def find_centroids(vertices, faces):
+
+    centroids = []
+    for item in faces:
+        # print(item[0])
+        # print(vertices[item[0][0]-1][0], vertices[item[0][1]-1][0], vertices[item[0][2]-1][0])
+        P1 = (vertices[item[0][0]-1][0] + vertices[item[0][1]-1][0] + vertices[item[0][2]-1][0]) / 3
+        P2 = (vertices[item[0][0]-1][1] + vertices[item[0][1]-1][1] + vertices[item[0][2]-1][1]) / 3
+        P3 = (vertices[item[0][0]-1][2] + vertices[item[0][1]-1][2] + vertices[item[0][2]-1][2]) / 3
+        centroids.append([P1, P2, P3])
+    
+    return centroids
 
 
 if __name__ == "__main__":
 
     mp_vertices, mp_uv, mp_faces, mtl_file_mp, mtl_name_mp = read_obj(sys.argv[1])
     hg_vertices, hg_uv, hg_faces, mtl_file, mtl_name = read_obj(sys.argv[2])
+    # print(mp_vertices)
 
     mp_vertices_2D = [[v[0], v[1]] for v in mp_vertices]
     hg_vertices_2D = [[v[0], v[1]] for v in hg_vertices]
@@ -50,12 +75,20 @@ if __name__ == "__main__":
         hg_vertices_2D[int(str[1])] = [None, None]
     file.close()
 
-    hg_points_2_triangles = []
+
+    # with io.open("mp_to_hg_mapping_many_2_one.txt", "w") as fout:
+    #     for i in range(len(hg_vertices)):
+
+    #         if hg_vertices_2D[i][0] != None:
+    #             nearest_points = nearest_3_points(hg_vertices[i], mp_vertices)
+    #             fout.write(f"{i} {nearest_points[0]} {nearest_points[1]} {nearest_points[2]}\n")
+
+
+    centroids = find_centroids(mp_vertices, mp_faces)
     with io.open("mp_to_hg_mapping_many_2_one.txt", "w") as fout:
         for i in range(len(hg_vertices)):
 
             if hg_vertices_2D[i][0] != None:
-                nearest_points = nearest_3_points(hg_vertices[i], mp_vertices)
-                fout.write(f"{i} {nearest_points[0]} {nearest_points[1]} {nearest_points[2]}\n")
-
-    
+                nearest_tri = nearest_face(hg_vertices[i], centroids)
+                # print(i, mp_faces[nearest_tri][0][0], mp_faces[nearest_tri][0][1], mp_faces[nearest_tri][0][2])
+                fout.write(f"{i} {mp_faces[nearest_tri][0][0]-1} {mp_faces[nearest_tri][0][1]-1} {mp_faces[nearest_tri][0][2]-1}\n")
