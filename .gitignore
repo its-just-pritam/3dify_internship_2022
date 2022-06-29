@@ -132,8 +132,10 @@ dmypy.json
 *.fbx
 *.obj
 *.blend
+*.blend1
 *.png
 *.jpg
+*.mtl
 
 beard/models/SVM
 beard/models/Random_forest

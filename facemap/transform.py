@@ -42,32 +42,19 @@ def find_projection(point, triangle):
 if __name__=="__main__":
     
     # Select and delete all objects to start with a clean space
-    bpy.ops.object.mode_set(mode = 'OBJECT')
+ 
     bpy.ops.object.select_all(action='SELECT')
     bpy.ops.object.delete(use_global=False, confirm=False)
     
     # Import the source object
-    src_FBXfilePath = 'C:/Users/srita/Desktop/3dify_internship/facemap/mp_face.obj'
+    src_FBXfilePath = 'C:/Users/srita/Desktop/3dify_internship/facemap/mp_face_temp_scaled.obj'
     mp_obj = bpy.ops.import_scene.obj(filepath=src_FBXfilePath, split_mode='OFF')
     mp_name = bpy.context.scene.objects[0].name
     
     # Import the target object
-    tar_FBXfilePath = 'C:/Users/srita/Desktop/3dify_internship/facemap/face.obj'
+    tar_FBXfilePath = 'C:/Users/srita/Desktop/3dify_internship/facemap/face_2.obj'
     _obj = bpy.ops.import_scene.obj(filepath=tar_FBXfilePath, split_mode='OFF')
     _name = bpy.context.scene.objects[1].name
-    
-    path = 'C:\\Users\\srita\Desktop\\3dify_internship\\facemap\\mp_to_hg_mapping.txt'
-    file = open(path,'r')
-    str_Array = file.readlines()
-    one_one_map = []
-    locate = [] 
-    
-    for str in str_Array:
-        str = str.replace('\n', '')
-        str = str.split(' ')
-        one_one_map.append((int(str[0]), int(str[1])))
-        locate.append(int(str[1]))
-    file.close()
     
     path = 'C:\\Users\\srita\Desktop\\3dify_internship\\facemap\\mp_to_hg_mapping_many_2_one.txt'
     file = open(path,'r')
@@ -86,14 +73,7 @@ if __name__=="__main__":
     selectObject([mp_name])
     mp_co = [i.co for i in bpy.context.active_object.data.vertices if i.select]
     
-    change = [None] * len(one_one_map)
     selectObject([_name])
-    
-    for map in one_one_map:
-        _v = bpy.context.active_object.data.vertices[map[1]].co
-        mp_v = mp_co[map[0]]
-        change[map[0]] = (mp_v[0]-_v[0], mp_v[1]-_v[1], mp_v[2]-_v[2])
-        bpy.context.active_object.data.vertices[map[1]].co = (mp_v[0], mp_v[1], mp_v[2])
 
     for map in many_one_map:
 
@@ -104,3 +84,7 @@ if __name__=="__main__":
         projected = find_projection(_v, [P1, P2, P3])
         print(_v, projected)
         bpy.context.active_object.data.vertices[map[0]].co = (projected[0], projected[1], projected[2])
+        
+    
+    export_path = 'C:/Users/srita/Desktop/3dify_internship/facemap/template.obj'
+    bpy.ops.export_scene.obj(filepath=export_path, use_selection=True)

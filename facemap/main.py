@@ -60,29 +60,16 @@ if __name__ == "__main__":
     plt.scatter(xs, ys)
     plt.show()
     plt.close()
-    # vor = Voronoi(points)
-    # fig = voronoi_plot_2d(vor)
-    # plt.show()
-    # plt.close()
 
-    path = 'mp_to_hg_mapping.txt'
+    path = 'vert_ignore.txt'
     file = open(path,'r')
     str_Array = file.readlines()
-    
+
     for str in str_Array:
         str = str.replace('\n', '')
         str = str.split(' ')
-        hg_vertices_2D[int(str[1])] = [None, None]
+        hg_vertices_2D[int(str[0])] = [None, None]
     file.close()
-
-
-    # with io.open("mp_to_hg_mapping_many_2_one.txt", "w") as fout:
-    #     for i in range(len(hg_vertices)):
-
-    #         if hg_vertices_2D[i][0] != None:
-    #             nearest_points = nearest_3_points(hg_vertices[i], mp_vertices)
-    #             fout.write(f"{i} {nearest_points[0]} {nearest_points[1]} {nearest_points[2]}\n")
-
 
     centroids = find_centroids(mp_vertices, mp_faces)
     with io.open("mp_to_hg_mapping_many_2_one.txt", "w") as fout:
@@ -90,5 +77,9 @@ if __name__ == "__main__":
 
             if hg_vertices_2D[i][0] != None:
                 nearest_tri = nearest_face(hg_vertices[i], centroids)
-                # print(i, mp_faces[nearest_tri][0][0], mp_faces[nearest_tri][0][1], mp_faces[nearest_tri][0][2])
+                print(i, mp_faces[nearest_tri][0][0], mp_faces[nearest_tri][0][1], mp_faces[nearest_tri][0][2])
                 fout.write(f"{i} {mp_faces[nearest_tri][0][0]-1} {mp_faces[nearest_tri][0][1]-1} {mp_faces[nearest_tri][0][2]-1}\n")
+        
+            # nearest_tri = nearest_face(hg_vertices[i], centroids)
+            # print(i, mp_faces[nearest_tri][0][0], mp_faces[nearest_tri][0][1], mp_faces[nearest_tri][0][2])
+            # fout.write(f"{i} {mp_faces[nearest_tri][0][0]-1} {mp_faces[nearest_tri][0][1]-1} {mp_faces[nearest_tri][0][2]-1}\n")
