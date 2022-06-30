@@ -72,7 +72,7 @@ def centroid_mapper(mp_obj, hg_obj):
 
             if hg_vertices_2D[i][0] != None:
                 nearest_tri = nearest_face(hg_vertices[i], centroids)
-                print(i, mp_faces[nearest_tri][0][0], mp_faces[nearest_tri][0][1], mp_faces[nearest_tri][0][2])
+                # print(i, mp_faces[nearest_tri][0][0], mp_fces[nearest_tri][0][1], mp_faces[nearest_tri][0][2])
                 fout.write(f"{i} {mp_faces[nearest_tri][0][0]-1} {mp_faces[nearest_tri][0][1]-1} {mp_faces[nearest_tri][0][2]-1}\n")
 
 
